@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+{% block title %} {{ post.title }} {% endblock %}
+{% block content %}
+    <a href="/blog">Назад</a>
+    <h4>{{ post.title }}</h4>
+    <p>Опубликовано: {{ post.publish }} от {{ post.author }}</p>
+    <p>{{ post.body|linebreaks }}</p>
+
+    <hr>
+     {% with comments.count as total_comments %}
+        <p>{{ total_comments }} comment{{ total_comments|pluralize }}</p>
+    {% endwith %}
+
+    {% for comment in comments %}
+        <div class="comment">
+            <span class="info">
+                {{ comment.name }}
+                {{ comment.created }}:
+                {{ comment.body|linebreaks }}
+            </span>
+        </div>
+        <hr>
+    {% empty %}
+        <p>Пока нет комментариев.</p>
+    {% endfor %}
+
+    {% if new_comment %}
+        <h2>Ваш комментарий был добавлен.</h2>
+    {% else %}
+        <form action="." method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <p><input type="submit" value="Добавить комментарий"></p>
+        </form>
+    {% endif %}
+
+{% endblock %}

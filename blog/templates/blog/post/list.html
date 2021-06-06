@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+{% block title %} Piper Studio {% endblock %}
+{% block content %}
+    {% for post in posts %}
+        <h4>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </h4>
+        <p>Опубликовано: {{ post.publish }} от {{ post.author }}</p>
+        <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+        <p>
+            <a href="{% url "blog:post_share" post.id %}">Поделиться этой записью</a>
+        </p>
+        <hr>
+    {% endfor %}
+    {% include "pagination.html" with page=posts %}
+    <hr>
+{% endblock %}
